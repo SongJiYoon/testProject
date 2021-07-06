@@ -1,0 +1,6 @@
+#spring:
+#profiles:
+#active:dev
+
+
+#spring:devtools:restart:exclude:static/**, public/**

@@ -18,10 +18,8 @@
 	<properties>
 		<java.sdk.version>1.8</java.sdk.version>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-		<project.reporting.outputEncoding>UTF-8
-		</project.reporting.outputEncoding>
-		<org.springframework.version>5.1.5.RELEASE
-		</org.springframework.version>
+		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+		<org.springframework.version>5.1.5.RELEASE</org.springframework.version>
 		<com.redjframework.version>3.4.305-RELEASE</com.redjframework.version>
 		<!-- <log4j.version>1.2.17</log4j.version> <tiles.version>3.0.1</tiles.version> 
 			<org.slf4j.version>1.7.5</org.slf4j.version> -->
@@ -39,6 +37,16 @@
 			<artifactId>spring-boot-starter-web</artifactId>
 		</dependency>
 
+		<!-- <dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-jdbc</artifactId>
+		</dependency> -->
+		
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-devtools</artifactId>
+		</dependency>	
+		
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-test</artifactId>
