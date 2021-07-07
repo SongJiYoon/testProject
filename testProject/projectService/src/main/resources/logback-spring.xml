@@ -2,31 +2,26 @@
 <Configuration>
 
 	<!-- 프로퍼티로 로그레벨 지정 -->
-	<springProperty scope="context" name="LOG_LEVEL" source="logging.level.root" />
-	<!-- pattern --> 
-	<property name="LOG_PATTERN" value="[%d{yyyy-MM-dd HH:mm:ss.SSS}] %5p [%C{1}(%M:%L)] :%m%n%n"/>
+	<springProperty scope="context" name="LOG_LEVEL" source="logging.level.root"/>
 
-	<appender name="console" target="ch.qos.logback.core.ConsoleAppender">
-		<encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
-			<!-- <PatternLayout pattern="%d{yyyy-MM-dd HH:mm:ss} [%-5p] [%X{sessionID}] 
-				(%-35c{1}:%-3L) %m%n" /> -->
-			<pattern>${LOG_PATTERN}</pattern>
-		</encoder>
-	</appender>
-
-	<Loggers>
+    <Appenders>
+        <Console name="console" target="ch.qos.logback.core.ConsoleAppender">
+            <PatternLayout pattern="%d{yyyy-MM-dd HH:mm:ss} [%-5p] [%X{sessionID}] (%-35c{1}:%-3L) %m%n" />
+        </Console>
+    </Appenders>
+    
+    <Loggers>
 		<!-- jdbc.sql Loggers -->
-		<Logger name="jdbc.connection" level="OFF" additivity="false" />
-		<Logger name="jdbc.audit" level="OFF" additivity="false" />
-		<Logger name="jdbc.sqlonly" level="INFO" additivity="false" />
-		<Logger name="jdbc.sqltiming" level="OFF" additivity="false" />
-		<Logger name="jdbc.resultset" level="OFF" additivity="false" />
-		<Logger name="jdbc.resultsettable" level="OFF" additivity="false" />
-	</Loggers>
-	
-
-		<!-- FATAL, ERROR, WARN, INFO, DEBUG, TRACE -->
-		<Root level="${LOG_LEVEL}">
-			<AppenderRef ref="console" />
-		</Root>
+        <Logger name="jdbc.connection"      level="OFF" additivity="false"/>
+        <Logger name="jdbc.audit"           level="OFF" additivity="false"/>
+        <Logger name="jdbc.sqlonly"         level="INFO" additivity="false"/>
+        <Logger name="jdbc.sqltiming"       level="OFF" additivity="false"/>
+        <Logger name="jdbc.resultset"       level="OFF" additivity="false"/>
+        <Logger name="jdbc.resultsettable"  level="OFF" additivity="false"/>
+        
+	    <!-- FATAL, ERROR, WARN, INFO, DEBUG, TRACE -->        
+        <Root level="${LOG_LEVEL}">
+            <AppenderRef ref="console" />
+        </Root>
+    </Loggers>
 </Configuration>
