@@ -1,0 +1,68 @@
+#서버 설정
+spring:
+  profiles:
+    active: dev
+#DB 접속정보
+  datasource:
+    driverClassName: net.sf.log4jdbc.sql.jdbcapi.DriverSpy
+    hikari:
+      maximumPoolSize: 40            #maxActive
+      minimumIdle: 10                #minIdle
+      connectionTestQuery: SELECT 1  #validationQuery
+      idleTimeout: 600000            #minEvictableIdleTimeMillis
+      
+
+  devtools:
+    restart: exclude:static/**, public/**
+
+#JSP 설정    
+mvc:
+  view:
+    prefix: /WEB-INF/jsp/ 
+    suffix: .jsp
+    
+
+#Mybatis 설정
+mybatis:
+  typeAliasesPackage: com.test.project.service.vo
+  mapperLocations: com/test/project/service/mapper/*Mapper.xml
+  configLocation: classpath:mybatis-config.xml
+
+#로그
+log4jdbc:
+  spylogdelegator:
+    name: net.sf.log4jdbc.log.slf4j.Slf4jSpyLogDelegator 
+  dump:
+    sql: 
+      maxlinelength: 0
+
+---
+#개발(dev)
+spring:
+  profiles: dev
+  datasource:
+    url: jdbc:oracle:thin:@(DESCRIPTION=(ADDRESS=(PROTOCOL=TCP)(HOST=10.1.30.11)(PORT=1521))(LOAD_BALANCE = ON)(CONNECT_DATA=(SERVER=DEDICATED)(SERVICE_NAME=SMTUTFD)))
+    hikari:
+      username: kuict
+      password: ictdev
+
+logging: 
+  level: 
+    root: info 
+
+
+
+---
+#QA(qa)
+spring:
+  profiles: qa
+
+
+
+---
+#운영(real)
+spring:
+  profiles: real
+  
+  
+
