@@ -1,27 +1,32 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<Configuration>
+﻿<?xml version="1.0" encoding="UTF-8" ?>
+<configuration>
+  <appender name="console" class="ch.qos.logback.core.ConsoleAppender">
+    <encoder>
+      <pattern>[%d{yyyy-MM-dd HH:mm:ss.SSS}]  %-3level [%logger{0}:%line] : %msg %n</pattern>
+    </encoder>
+  </appender>
+  
+  <appender name="console-sql" class="ch.qos.logback.core.ConsoleAppender">
+    <encoder>
+      <pattern>[%d{yyyy-MM-dd HH:mm:ss.SSS}]  %-3level [%logger{0}:%line] SQL : %n %msg %n</pattern>
+    </encoder>
+  </appender>
+  
+  <logger name="jdbc.sqlonly" level="INFO">
+    <appender-ref ref="console-sql" />
+  </logger>
+   
+  <logger name="jdbc" level="OFF"/>
+  <logger name="jdbc.sqlonly" level="OFF"/>
+  <logger name="jdbc.sqltiming" level="OFF"/>
+  <logger name="jdbc.audit" level="OFF"/>
+  <logger name="jdbc.resultset" level="OFF"/>
+  <logger name="jdbc.resultsettable" level="OFF"/>
+  <logger name="jdbc.connection" level="OFF"/>
+  
 
-	<!-- 프로퍼티로 로그레벨 지정 -->
-	<springProperty scope="context" name="LOG_LEVEL" source="logging.level.root"/>
-
-    <Appenders>
-        <Console name="console" target="ch.qos.logback.core.ConsoleAppender">
-            <PatternLayout pattern="%d{yyyy-MM-dd HH:mm:ss} [%-5p] [%X{sessionID}] (%-35c{1}:%-3L) %m%n" />
-        </Console>
-    </Appenders>
-    
-    <Loggers>
-		<!-- jdbc.sql Loggers -->
-        <Logger name="jdbc.connection"      level="OFF" additivity="false"/>
-        <Logger name="jdbc.audit"           level="OFF" additivity="false"/>
-        <Logger name="jdbc.sqlonly"         level="INFO" additivity="false"/>
-        <Logger name="jdbc.sqltiming"       level="OFF" additivity="false"/>
-        <Logger name="jdbc.resultset"       level="OFF" additivity="false"/>
-        <Logger name="jdbc.resultsettable"  level="OFF" additivity="false"/>
-        
-	    <!-- FATAL, ERROR, WARN, INFO, DEBUG, TRACE -->        
-        <Root level="${LOG_LEVEL}">
-            <AppenderRef ref="console" />
-        </Root>
-    </Loggers>
-</Configuration>
+  
+  <root level="INFO">
+    <appender-ref ref="console" />
+  </root>
+</configuration>
