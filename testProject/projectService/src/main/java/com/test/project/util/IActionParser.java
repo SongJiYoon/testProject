@@ -1,8 +1,5 @@
 package com.test.project.util;
 
-import java.io.File;
-
-
 /**
  * Created by CHY on 2016-04-01.
  */

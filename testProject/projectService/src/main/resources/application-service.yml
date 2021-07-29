@@ -1,0 +1,75 @@
+#server
+spring:
+#DB
+  datasource:
+    driverClassName: net.sf.log4jdbc.sql.jdbcapi.DriverSpy
+    hikari:
+      maximumPoolSize: 40                     #maxActive
+      minimumIdle: 10                         #minIdle
+      connectionTestQuery: SELECT 1 FROM DUAL #validationQuery
+      idleTimeout: 600000                     #minEvictableIdleTimeMillis
+      autoCommit: false                       #aop로 제어
+
+#  devtools:
+#     liverload:
+#      enabled:true
+#    restart: exclude:static/**, public/**
+
+#Mybatis
+mybatis:
+  typeAliasesPackage: com.test.project.service.vo
+  mapperLocations: com/test/project/service/mapper/*Mapper.xml
+  configuration: 
+    cacheEnabled: false
+    lazyLoadingEnabled: false
+    multipleResultSetsEnabled: true
+    useColumnLabel: true
+    defaultStatementTimeout: 25000
+    defaultExecutorType: REUSE
+    mapUnderscoreToCamelCase: true
+    jdbcTypeForNull: NULL
+
+
+---
+#dev
+spring:
+  profiles: dev
+  datasource:
+    url: jdbc:log4jdbc:oracle:thin:@(DESCRIPTION=(ADDRESS=(PROTOCOL=TCP)(HOST=10.1.30.11)(PORT=1521))(LOAD_BALANCE=ON)(CONNECT_DATA=(SERVER=DEDICATED)(SERVICE_NAME=SMTUTFD)))
+    hikari:
+      username: kuict
+      password: ictdev
+
+#logging: 
+#  level: 
+#    root: info
+
+crypto:
+  algorithm: AES
+  transformation: AES/ECB/PKCS5Padding
+  key: kumonict12345678
+
+#nas
+nas:
+  mount:
+    path: /kumon_ict/kumonict
+  cdn:
+    baseurl: http://img-allngimg.ktcdn.co.kr/kumonict
+    videobaseurl: http://cms-allng.ktcdn.co.kr/kumonict
+
+
+
+---
+#qa
+spring:
+  profiles: qa
+
+
+
+---
+#real
+spring:
+  profiles: real
+  
+  
+

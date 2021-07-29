@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.test.project.service.mapper.intf.CmsFileMapper">
+    
+    <insert id="insertCmsFile" parameterType="com.test.project.service.vo.CmsFile">
+        <selectKey keyColumn="OID" keyProperty="oid" order="BEFORE" resultType="String">
+            SELECT /* CmsFileMapper.xml insertCmsFile */
+            		'CMS' || TO_CHAR(SYSDATE, '-YYYYMMDDHH24MISS-') || SEQ_FILE_OID.NEXTVAL AS OID
+			  FROM DUAL
+        </selectKey>
+		INSERT	/* CmsFileMapper.xml insertCmsFile */
+		  INTO	CMS_FILES
+			(
+				OID
+		      , NAME
+		      , LAST_VERSION_CODE
+		      , CMS_INFO
+		      , CREATED_ON
+			)
+		VALUES
+			(
+				#{oid, jdbcType=VARCHAR}
+		      , #{name, jdbcType=VARCHAR}
+		      , #{lastVersionCode, jdbcType=INTEGER}
+		      , #{cmsInfo, jdbcType=VARCHAR}
+		      , SYSDATE
+			)
+    </insert>
+    
+    <update id="updateCmsFile" parameterType="com.test.project.service.vo.CmsFile">
+		UPDATE	/* CmsFileMapper.xml updateCmsFile */
+		      	CMS_FILES
+		   SET	UPDATED_ON = SYSDATE
+		   <if test="name != null and name != ''">, NAME = #{name, jdbcType=VARCHAR}</if>
+		   <if test="lastVersionCode != null and lastVersionCode > 0">, LAST_VERSION_CODE = #{lastVersionCode, jdbcType=INTEGER}</if>
+		   <if test="cmsInfo != null and cmsInfo != ''">, CMS_INFO =  #{cmsInfo, jdbcType=VARCHAR}</if>
+		 WHERE	oid = #{oid, jdbcType=VARCHAR}        
+    </update>
+    
+    <update id="deleteCmsFile" parameterType="int" flushCache="true">
+		UPDATE /* CmsFileMapper.xml deleteCmsFile */
+		      CMS_FILES
+		   SET DELETED_ON = SYSDATE
+		 WHERE oid = #{oid, jdbcType=VARCHAR}          
+    </update>
+    
+    <resultMap id="selectCmsFilesMap" type="com.test.project.service.vo.CmsFile">
+        <id column="OID" property="oid"/>
+        <result column="NAME" property="name"/>
+        <result column="LAST_VERSION_CODE" property="lastVersionCode"/>
+        <result column="CMS_INFO" property="cmsInfo"/>
+        <result column="CREATED_ON" property="createdOn" javaType="java.util.Date" jdbcType="DATE"/>
+        <result column="UPDATED_ON" property="updatedOn" javaType="java.util.Date" jdbcType="DATE"/>
+    </resultMap>
+    
+    <select id="selectCmsFiles" parameterType="com.test.project.service.vo.CmsFile" resultMap="selectCmsFilesMap" flushCache="false" useCache="true">
+		SELECT /* CmsFileMapper.xml selectCmsFiles */
+		      OID
+		     , NAME
+		     , LAST_VERSION_CODE
+		     , CMS_INFO
+		     , CREATED_ON
+		     , UPDATED_ON
+		  FROM CMS_FILES
+		  WHERE 1=1
+		<if test="oid != null and oid != ''">AND OID = #{oid, jdbcType=VARCHAR}</if>
+		<if test="name != null and name != ''">AND NAME LIKE #{name, jdbcType=VARCHAR} || '%'</if>
+    </select>
+    
+</mapper>

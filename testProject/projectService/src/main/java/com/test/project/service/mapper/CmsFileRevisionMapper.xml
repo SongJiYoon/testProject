@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.test.project.service.mapper.intf.CmsFileRevisionMapper">
+    
+	<insert id="insertCmsFileRevision" parameterType="com.test.project.service.vo.CmsFileRevision" >
+		INSERT /* CmsFileRevisionMapper.xml insertCmsFileRevision */
+		      INTO  CMS_FILE_REVISIONS (FILE_OID
+		                              , VERSION_CODE
+		                              , MINE_TYPE
+		                              , DISK_FILENAME
+		                              , FILE_SIZE
+		                              , FILE_PATH
+		                              , CMS_INFO
+		                              , CREATED_ON)
+		     VALUES (#{fileOid, jdbcType=VARCHAR}
+		           , #{versionCode, jdbcType=INTEGER}
+		           , #{mineType, jdbcType=VARCHAR}
+		           , #{diskFilename, jdbcType=VARCHAR}
+		           , #{fileSize, jdbcType=INTEGER}
+		           , #{filePath, jdbcType=VARCHAR}
+		           , #{cmsInfo, jdbcType=VARCHAR}
+		           , SYSDATE)	    
+        
+    </insert>
+    
+    <update id="deleteCmsFileRevision" >
+		UPDATE /* CmsFileRevisionMapper.xml deleteCmsFileRevision */
+		      CMS_FILE_REVISIONS
+		   SET DELETED_ON = SYSDATE
+		 WHERE FILE_OID = #{fileOid, jdbcType=VARCHAR}
+		   AND VERSION_CODE = #{versionCode, jdbcType=INTEGER}         
+    </update>
+    
+    <resultMap id="selectCmsFileRevisionsMap" type="com.test.project.service.vo.CmsFileRevision">
+        <id column="FILE_OID" property="fileOid"/>
+        <id column="VERSION_CODE" property="versionCode"/>
+        <result column="MINE_TYPE" property="mineType"/>
+        <result column="DISK_FILENAME" property="diskFilename"/>
+        <result column="FILE_SIZE" property="fileSize"/>
+        <result column="FILE_PATH" property="filePath"/>
+        <result column="CMS_INFO" property="cmsInfo"/>
+        <result column="CREATED_ON" property="createdOn"/>
+    </resultMap>
+    <select id="selectCmsFileRevisions" flushCache="false" useCache="true">
+		SELECT /* CmsFileRevisionMapper.xml selectCmsFileRevisions */
+		      FILE_OID
+		     , VERSION_CODE
+		     , MINE_TYPE
+		     , DISK_FILENAME
+		     , FILE_SIZE
+		     , FILE_PATH
+		     , CMS_INFO
+		     , CREATED_ON
+		  FROM CMS_FILE_REVISIONS
+		 WHERE FILE_OID = #{fileOid, jdbcType=VARCHAR}
+		   AND VERSION_CODE = #{versionCode, jdbcType=INTEGER}        
+    </select>
+    
+    <select id="selectCmsFileUrl" parameterType="String" resultType="String">
+		SELECT /* CmsFileRevisionMapper.xml selectCmsFileUrl */
+		       /*+ INDEX_DESC(CMS_FILE_REVISIONS CMS_FILE_REVISIONS_PK) */
+		      CMS_INFO
+		 FROM CMS_FILE_REVISIONS
+		WHERE FILE_OID = #{fileOid, jdbcType=VARCHAR}
+		<if test="versionCode > 0">AND VERSION_CODE = #{versionCode, jdbcType=INTEGER}</if>
+		  /*AND DELETED_ON IS NULL*/
+		  AND ROWNUM = 1        
+    </select>
+    
+    <select id="selectMaxFileRevision" resultType="com.test.project.service.vo.CmsFileRevision">
+        SELECT /* CmsFileRevisionMapper.xml selectMaxFileRevision */
+        	   /*+ INDEX_DESC(CMS_FILE_REVISIONS CMS_FILE_REVISIONS_PK) */
+		       FILE_OID
+		     , VERSION_CODE
+		     , MINE_TYPE
+		     , DISK_FILENAME
+		     , FILE_SIZE
+		     , FILE_PATH
+		     , CMS_INFO
+		     , CREATED_ON
+		  FROM CMS_FILE_REVISIONS
+		 WHERE FILE_OID = #{fileOid, jdbcType=VARCHAR}
+		   AND ROWNUM = 1
+    </select>
+    
+</mapper>

@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://www.mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.test.project.service.mapper.intf.UserMapper">
+    
+    <!-- 사용자 로그인정보 조회 -->
+    <select id="selectUserInfo"  resultType="com.test.project.service.vo.UserInfo">
+		SELECT /* UserMapper.xml selectUserInfo */
+		       USER_NO AS userNo
+		     , USER_ID AS userId
+		     , CIPDEC('df',PWD) AS pwd
+		     , USER_NM AS userNm
+		     , USER_DIV_CD AS userDivCd
+		     , USER_STS_CD AS userStsCd
+		  FROM USER_INFO
+		 WHERE USER_ID = #{userID}
+		   AND USER_STS_CD = 'OK'
+    </select>
+    
+    <!-- 사용자 그룹 리스트 조회 -->
+    <select id="selectUserGrpList" resultType="string" >
+	    SELECT /* UserMapper.xml selectUserGrpList */
+	    	   GRP_ID
+	      FROM USER_GRP_INFO
+	     WHERE USER_NO = #{userNo}
+    </select>
+    
+    <!-- 사용자 로그인정보 조회 -->
+    <select id="selectClassUserInfo"  resultType="com.test.project.service.vo.UserInfo">
+		SELECT /* UserMapper.xml selectClassUserInfo */
+		       A.USER_NO AS userNo 
+		     , A.USER_ID AS userId 
+		     , CIPDEC('df',PWD) AS pwd
+		     , A.USER_NM AS userNm 
+		     , B.GRP_ID AS userDivCd
+		     , A.USER_STS_CD AS userStsCd 
+		  FROM USER_INFO A
+		     , USER_GRP_INFO B
+		 WHERE A.USER_ID = #{userID}
+		   AND A.USER_STS_CD = 'OK'
+		   AND A.USER_NO = B.USER_NO
+    </select>
+
+</mapper>

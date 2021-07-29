@@ -1,0 +1,60 @@
+#서버 설정
+spring:
+  config:
+    useLegacyProcessing: true
+
+  profiles:
+    include: service
+    active: dev
+  
+  servlet:
+    multipart:
+      maxFileSize: 1048576000
+      location: /home/slpdev/services/kumonict/tmp
+
+#  devtools:
+#     liverload:
+#      enabled:true
+#    restart: exclude:static/**, public/**
+
+#JSP 설정    
+  mvc:
+    mediaTypes:
+      inc: text/inc;charset=UTF-8
+      do: text/html;charset=UTF-8
+      htm: text/html;charset=UTF-8
+      html: text/html;charset=UTF-8
+      json: application/json;charset=UTF-8
+      jsonp: application/javascript;charset=UTF-8
+      xml: application/xml;charset=UTF-8
+    view:
+      prefix: /WEB-INF/jsp/ 
+      suffix: .jsp
+      contentType: text/inc
+    
+
+---
+#개발(dev)
+spring:
+  profiles: dev
+
+#logging: 
+#  level: 
+#    root: info 
+
+
+
+---
+#QA(qa)
+spring:
+  profiles: qa
+
+
+
+---
+#운영(real)
+spring:
+  profiles: real
+  
+  
+

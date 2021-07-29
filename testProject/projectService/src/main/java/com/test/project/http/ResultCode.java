@@ -5,6 +5,19 @@ public enum ResultCode {
     , error("9999","실패")
 
     
+	/* Admin (5000~)*/
+	, not_found_role("5010", "교사에 할당된 권한이 없습니다. 관리자에게 문의하여 주세요")
+	, no_cnt_error("5011","해당 수업의 교사 변경이 불가합니다. 동일한 시간에 이미 수업을 진행중입니다.")
+	, mbr_cnt_yn("5012","해당 방에 참여한 학생이 존재하여 삭제할 수 없습니다.")
+	, user_scr_cnt("5013","이미 진행중인 수업이 있습니다. 수업 등록이 불가합니다.")
+	, already_tutorCls_info("5014","수업이 이미 시작되었습니다. 교사 변경이 불가합니다.")
+	, only_open_check("5015","과목당 최소 1개의 설문지는 공개 처리해야 합니다.")
+	, success_regist("5016","등록이 완료되었습니다.")
+	, success_modify("5017","수정이 완료되었습니다.")
+	, success_delete("5018", "삭제가 완료되었습니다.")
+    , success_memo("5019", "쪽지를 보냈습니다.")
+    
+    
     /* 공통(9000~) */
 //    , service_inspection_time("9000", "<div style=\"font-size:30px;text-align:center;\"><b>스마트구몬 회원 이용제한 안내</b></div>" 
 //                                    + "<div style=\"font-size:20px;\"><br/>인프라 증설 작업으로 인하여 서비스가 임시 <br/>제한됩니다.<br/>"

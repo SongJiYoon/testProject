@@ -14,8 +14,12 @@ import javax.crypto.IllegalBlockSizeException;
 import javax.crypto.NoSuchPaddingException;
 import javax.crypto.spec.SecretKeySpec;
 
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Component;
+
 import com.redjframework.security.Base64;
 
+@Component
 public class CryptoUtil {
 
 	/**
@@ -82,14 +86,13 @@ public class CryptoUtil {
 		return decodedString;
 	}
 	
-
 	String transformation = null;
-
+	
 	String algorithm = null;
 
 	String charset = "UTF-8";
 
-	public CryptoUtil(String algorithm, String transformation) {
+	public CryptoUtil(@Value("${crypto.transformation}")String algorithm, @Value("${crypto.algorithm}")String transformation) {
 		super();
 		this.algorithm = algorithm;
 		this.transformation = transformation;

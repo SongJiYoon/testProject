@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://www.mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.test.project.service.mapper.intf.UserGrpMenuMapper">
+	
+	<!-- 그룹별 메뉴 리스트 조회 -->
+	<select id="selectMenuListByGrp" resultType="com.test.project.service.vo.MenuInfo">
+		SELECT /* UserGrpMenuMapper.xml selectMenuListByGrp */
+			   DISTINCT M.*
+		  FROM MENU_INFO M
+		CONNECT BY M.MENU_NO = PRIOR M.PRT_MENU_NO
+		  START WITH M.MENU_NO IN (SELECT G.MENU_NO 
+		                             FROM GRP_MENU_INFO G 
+		                            WHERE G.GRP_ID IN <foreach item="item" index="index" collection="userGrpNos" open="(" separator="," close=")">#{item}</foreach>)
+		 ORDER SIBLINGS BY M.MENU_ODR
+	</select>
+	
+	<!-- 그룹 리스트 조회 -->	
+	<select id="selectGrpList" resultType="com.test.project.service.vo.UserGrpMenuInfo">
+		SELECT /* UserGrpMenuMapper.xml selectGrpList */
+		       GRP_ID AS grpId		/* 그룹 아이디 */
+		     , GRP_NM AS grpNm		/* 그룹 명 */
+		     , REG_DTTM AS regDttm		/* 등록 일자 */
+		     , MOD_DTTM AS modDttm		/* 수정 일자 */
+		  FROM GRP_INFO		/* 그룹 정보 */
+	</select>
+	
+</mapper>
