@@ -35,7 +35,7 @@ mybatis:
 spring:
   profiles: dev
   datasource:
-    url: jdbc:log4jdbc:oracle:thin:@(DESCRIPTION=(ADDRESS=(PROTOCOL=TCP)(HOST=10.1.30.11)(PORT=1521))(LOAD_BALANCE=ON)(CONNECT_DATA=(SERVER=DEDICATED)(SERVICE_NAME=SMTUTFD)))
+    url: jdbc:log4jdbc:oracle:thin:@(DESCRIPTION=(ADDRESS=(PROTOCOL=TCP)(HOST=10.1.60.14)(PORT=1521))(LOAD_BALANCE=ON)(CONNECT_DATA=(SERVER=DEDICATED)(SERVICE_NAME=SMTUTFD)))
     hikari:
       username: kuict
       password: ictdev

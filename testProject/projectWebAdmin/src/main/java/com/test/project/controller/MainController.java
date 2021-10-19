@@ -1,36 +1,25 @@
 package com.test.project.controller;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.multipart.MultipartFile;
 
 import com.redjframework.util.ArrayUtil;
 import com.test.project.controller.annotations.AccessAuth;
 import com.test.project.controller.common.CommonController;
 import com.test.project.http.ResultCode;
-import com.test.project.service.CmsFileService;
 import com.test.project.service.MainService;
 import com.test.project.service.UserService;
-import com.test.project.service.vo.CmsFileRevision;
 import com.test.project.service.vo.MenuInfo;
 import com.test.project.service.vo.UserGrpMenuInfo;
 import com.test.project.service.vo.UserInfo;
@@ -38,7 +27,6 @@ import com.test.project.service.vo.UserSessionInfo;
 import com.test.project.util.SpenUtil;
 
 @Controller
-@RequestMapping("/*")
 @AccessAuth(false)
 public class MainController extends CommonController {
 	public static String url_error = "error/error.html";
@@ -48,11 +36,6 @@ public class MainController extends CommonController {
 	@Autowired UserService userService;
 
 	@Autowired MainService mainService;
-	
-	@Autowired CmsFileService cmsFileService;
-
-	@Value("${server.uploadTempDir}")
-	String serverUploadTempDir;
 	
 	Logger log = LoggerFactory.getLogger(getClass());
 
@@ -64,7 +47,7 @@ public class MainController extends CommonController {
 	 * @param tutorNo
 	 * @return
 	 */
-	@RequestMapping("index")
+	@RequestMapping("index.html")
 	@AccessAuth
 	public Object index(HttpServletRequest request, @RequestParam(value="menuNo", required=false) String menuNo){
 
@@ -89,22 +72,23 @@ public class MainController extends CommonController {
 		}
 		
 		request.setAttribute("subTitle", title);
-
-		return forward("index.html").addObject("menuNo", menuNo);
+ 
+		return forward("common/index").addObject("menuNo", menuNo);
+	}
+	
+	@GetMapping("/login/loginForm.html")
+	public Object loginForm(){
+		return forward("common/login/loginForm");
 	}
 
-	/**
-	 * 로그인
-	 * 
-	 * @param userid
-	 * @param pwd
-	 * @param request
-	 * @return
-	 * @throws Exception
-	 */
-	@RequestMapping(value="/login/*", method=RequestMethod.POST)
-	public Object login(@RequestParam("userId") String userId, @RequestParam("pwd") String pwd, HttpServletRequest request) throws Exception{
+	@RequestMapping("/error/error")
+	public Object errorPage(HttpServletRequest request){
 		
+		return forward("common/error/error").addObject("resultCode", request.getAttribute("javax.servlet.error.status_code"));
+	}
+	
+	@PostMapping(value="/login/login")
+	public Object login(@RequestParam("userId") String userId, @RequestParam("pwd") String pwd, HttpServletRequest request) throws Exception{
 		if(("".equals(userId) || null == userId) || ("".equals(pwd) || null == pwd)){
 			/* not_found_user(사용자 정보를 찾을 수 없습니다.) */
 			return result(ResultCode.not_found_user);
@@ -168,82 +152,15 @@ public class MainController extends CommonController {
 		request.getSession().setAttribute(SESS_USER_INFO, sess);
 		
 		String go = String.format("%s/index.html?menuNo=%s", request.getContextPath(), menuInfos.get(0).getMenuNo());
+		
 		return success().addObject("go", go);
 	}
 	
-
-	@RequestMapping(value="/login/*", method=RequestMethod.GET)
-	public Object loginForm(){
-		System.out.println("뭔개같은");
-		return forward();
-	}
-
-	@RequestMapping(value="/login/logout", method=RequestMethod.GET)
+	@GetMapping(value="/login/logout")
 	public Object loginOut(HttpServletRequest request){
 		request.getSession().invalidate();
-		return redirect("/");
+		return redirect("/index.html");
 	}
 
-	@RequestMapping("/error/*")
-	public Object errorPage(HttpServletRequest request){
-		
-		return forward().addObject("resultCode", request.getAttribute("javax.servlet.error.status_code"));
-	}
-
-	@RequestMapping("/plupload")
-	@ResponseBody
-	public Object plupload(
-			@RequestBody MultipartFile file,
-			@RequestParam String name,
-			@RequestParam(defaultValue="1") int chunks,
-			@RequestParam(defaultValue="0") int chunk,
-			HttpServletRequest request,
-			HttpServletResponse response) throws Exception {
-        File savedFile = new File(serverUploadTempDir, name);
-
-        if(!savedFile.exists()
-        		|| chunk == 0){
-        	file.transferTo(savedFile);
-        }
-        else{
-        	FileOutputStream out = new FileOutputStream(savedFile, true);
-        	InputStream in = file.getInputStream();
-
-        	try{
-        		byte[] bs = new byte[5120];
-        		int bl = 0;
-        		while((bl = in.read(bs)) != -1){
-        			out.write(bs, 0, bl);
-        		}
-        		out.flush();
-        	} finally{
-        		in.close();
-        		out.close();
-        	}
-        }
-
-        if(chunk + 1 == chunks){
-        	MultipartFile multipartFile = new MockMultipartFile("file",
-        			name,
-                    "application/octet-stream", new FileInputStream(savedFile));
-
-        	CmsFileRevision cmsFile = cmsFileService.newCmsUploadFile(name, multipartFile);
-        	return success(cmsFile);
-        }
-
-        return success();
-	}
-
-	@RequestMapping("/plfiles")
-	@ResponseBody
-	public Object plfiles(@RequestBody String[] fileOids){
-		List<CmsFileRevision> files = new ArrayList<CmsFileRevision>();
-
-		for(String foid: fileOids){
-			files.add(cmsFileService.getMaxCmsFileRevision(foid));
-		}
-
-		return success(files);
-	}
 		
 }

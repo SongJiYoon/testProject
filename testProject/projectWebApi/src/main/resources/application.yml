@@ -18,19 +18,19 @@ spring:
 #    restart: exclude:static/**, public/**
 
 #JSP 설정    
-  mvc:
-    mediaTypes:
-      inc: text/inc;charset=UTF-8
-      do: text/html;charset=UTF-8
-      htm: text/html;charset=UTF-8
-      html: text/html;charset=UTF-8
-      json: application/json;charset=UTF-8
-      jsonp: application/javascript;charset=UTF-8
-      xml: application/xml;charset=UTF-8
-    view:
-      prefix: /WEB-INF/jsp/ 
-      suffix: .jsp
-      contentType: text/inc
+#  mvc:
+#    mediaTypes:
+#      inc: text/inc;charset=UTF-8
+#      do: text/html;charset=UTF-8
+#      htm: text/html;charset=UTF-8
+#      html: text/html;charset=UTF-8
+#      json: application/json;charset=UTF-8
+#      jsonp: application/javascript;charset=UTF-8
+#      xml: application/xml;charset=UTF-8
+#    view:
+#      prefix: /WEB-INF/jsp/ 
+#      suffix: .jsp
+#      contentType: text/inc
     
 
 ---

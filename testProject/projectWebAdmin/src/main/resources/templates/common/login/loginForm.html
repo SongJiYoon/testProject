@@ -1,0 +1,46 @@
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorator="common/layout/common">
+
+<div layout:fragment="login" class="app flex-row align-items-center">
+    <div class="container">
+      <div class="row justify-content-center">
+        <div class="col-md-5">
+          <div class="card-group">
+            <div class="card p-4">
+              <div id="testId" class="card-body">
+                <h1>로그인</h1>
+                <p class="text-muted">사용자 아이디와 패스워드를 입력하세요</p>
+                <form class="form-submit" action="login" method="post">
+                <div class="input-group mb-3">
+                  <div class="input-group-prepend">
+                    <span class="input-group-text">
+                      <i class="fas fa-user"></i>
+                    </span>
+                  </div>
+                  <input class="form-control" type="text" name="userId" placeholder="아이디">
+                </div>
+                <div class="input-group mb-4">
+                  <div class="input-group-prepend">
+                    <span class="input-group-text">
+                      <i class="fas fa-lock"></i>
+                    </span>
+                  </div>
+                  <input class="form-control" type="password" name="pwd" placeholder="패스워드">
+                </div>
+                <div class="row">
+                  <div class="col-12">
+                    <button class="btn btn-primary col-12" type="submit" onclick="
+	                    f_submit(this.form, function(r){
+	                        location.replace(r.go);
+	                    });
+	                ">로그인</button>
+                  </div>
+                </div>
+	                </form>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+ </html>

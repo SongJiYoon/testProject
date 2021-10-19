@@ -115,8 +115,8 @@ public class CommonController {
 	}
 
 	private CustomModelAndView result(String resultCode, String msg, Object data){
-		CustomModelAndView view = new CustomModelAndView();
-		view.setViewName("error/error.html");
+		CustomModelAndView view = new CustomModelAndView("jsonView");
+//		view.setViewName("error/error");
 		view.addObject("resultCode", resultCode);
 		view.addObject("resultMsg", msg);
 		view.addResultData(RESULTDATA_DATA, data);

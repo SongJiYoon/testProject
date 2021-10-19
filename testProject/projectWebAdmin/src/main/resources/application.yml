@@ -1,4 +1,4 @@
-#스프링
+##스프링
 spring:
   config:
     useLegacyProcessing: true
@@ -6,74 +6,78 @@ spring:
   profiles:
     include: service
     active: dev
-  
-  servlet:
-    multipart:
-      maxFileSize: 1048576000
-      location: /home/slpdev/services/kumonict/tmp
-
-#  devtools:
-#     liverload:
-#      enabled:true
-#    restart: exclude:static/**, public/**
-
-
-
-#JSP
+    
+#  
+#  servlet:
+#    multipart:
+#      maxFileSize: 1048576000
+#      location: /home/slpdev/services/kumonict/tmp
+#
+##  devtools:
+##     liverload:
+##      enabled:true
+##    restart: exclude:static/**, public/**
+#
+#
+#
+##JSP
+#  resources:
+#    staticLocations: classpath:/static/
 #  mvc:
+#    staticPathPattern: /resources/**
 #    view:
 #      prefix: /WEB-INF/view/
 #      suffix: .jsp
-#    contentnegotiation:
-#      mediaTypes:
-#        inc: text/inc;charset=UTF-8
-#        do: text/html;charset=UTF-8
-#        htm: text/html;charset=UTF-8
-#        html: text/html;charset=UTF-8
-#        json: application/json;charset=UTF-8
-#        jsonp: application/javascript;charset=UTF-8
-#        xml: application/xml;charset=UTF-8
-
-    
+##    contentnegotiation:
+##      mediaTypes:
+##        inc: text/inc;charset=UTF-8
+##        do: text/html;charset=UTF-8
+##        htm: text/html;charset=UTF-8
+##        html: text/html;charset=UTF-8
+##        json: application/json;charset=UTF-8
+##        jsonp: application/javascript;charset=UTF-8
+##        xml: application/xml;charset=UTF-8
+#
+#    
 #server
 server:
   servlet:
     contextPath: /admin
     session:
       timeout: 14400
-  encoding:
-    charset: UTF-8
-    enabled: true
-    force: true
-
-
-
----
-#dev
-spring:
-  profiles: dev
-
-#logging: 
-#  level: 
-#    root: info 
-
+#  encoding:
+#    charset: UTF-8
+#    enabled: true
+#    force: true
 #
-server:
-  uploadTempDir: /kumon_ict/kumonict/dev/tmp/project
-
-
-
----
-#qa
-spring:
-  profiles: qa
-
-
-
----
-#real
-spring:
-  profiles: real
-  
-  
-
+#
+#
+#---
+##dev
+#spring:
+#  profiles: dev
+#
+##logging: 
+##  level: 
+##    root: info 
+#
+##
+#server:
+#  uploadTempDir: /kumon_ict/kumonict/dev/tmp/project
+#
+#
+#
+#---
+##qa
+#spring:
+#  profiles: qa
+#
+#
+#
+#---
+##real
+#spring:
+#  profiles: real
+#  
+#  
+#

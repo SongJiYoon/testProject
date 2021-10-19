@@ -1,132 +1,105 @@
 package com.test.project.config;
 
-import java.nio.charset.StandardCharsets;
-import java.util.ArrayList;
-import java.util.List;
-
+import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.http.MediaType;
-import org.springframework.web.servlet.View;
-import org.springframework.web.servlet.ViewResolver;
-import org.springframework.web.servlet.config.annotation.ContentNegotiationConfigurer;
+import org.springframework.format.FormatterRegistry;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
+import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
+import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
+import org.springframework.web.servlet.config.annotation.ViewControllerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
-import org.springframework.web.servlet.view.ContentNegotiatingViewResolver;
-import org.springframework.web.servlet.view.InternalResourceViewResolver;
-import org.springframework.web.servlet.view.UrlBasedViewResolver;
-import org.springframework.web.servlet.view.tiles3.SimpleSpringPreparerFactory;
-import org.springframework.web.servlet.view.tiles3.TilesConfigurer;
-import org.springframework.web.servlet.view.tiles3.TilesView;
+import org.springframework.web.servlet.view.json.MappingJackson2JsonView;
 
-import com.test.project.controller.common.CustomMappingJacksonJsonView;
-import com.test.project.controller.common.ExcelView;
+import com.test.project.controller.common.AccessInterceptor;
+import com.test.project.controller.common.CustomAnnotationFormatterFactory;
+import com.test.project.controller.common.LoginCheckFilter;
+
+import nz.net.ultraq.thymeleaf.LayoutDialect;
 
 @Configuration
 @EnableWebMvc
 public class WebMvcConfig implements WebMvcConfigurer {
 
-	/*
-	 * @Bean public ContextLoaderListener requestContextListener() { return new
-	 * ContextLoaderListener(); }
-	 */
+	@Override
+	public void addResourceHandlers(ResourceHandlerRegistry registry) {
+		registry.addResourceHandler("/**").addResourceLocations("classpath:/META-INF/resources/")
+				.addResourceLocations("classpath:/resources/").addResourceLocations("classpath:/static/")
+				.addResourceLocations("classpath:/public/");
+	}
+
+	// thymeleaf layout
+	@Bean
+	public LayoutDialect layoutDialect() {
+		return new LayoutDialect();
+	}
+	
+	// modelAndView json 사용
+	@Bean
+    MappingJackson2JsonView jsonView(){
+        return new MappingJackson2JsonView();
+    }
+
+	
+//	@Bean
+//	public ContentNegotiatingViewResolver resolver() {
+//		ContentNegotiatingViewResolver resolver = new ContentNegotiatingViewResolver();
+//		
+//		List<View> viewList = new ArrayList<View>();
+//		
+//		viewList.add(new CustomMappingJacksonJsonView());
+//		viewList.add(new ExcelView());
+//		
+//		resolver.setDefaultViews(viewList);
+//		
+//		return resolver;
+//		
+//	}
+
+//	@Override
+//	public void configureContentNegotiation(ContentNegotiationConfigurer configurer) {
+//
+//		ConfigureContentNegotiation views = new  
+//		
+//		// set path extension to true
+//		configurer// set favor parameter to false
+//				  .favorParameter(false)
+//				  // ignore the accept headers
+//				  .ignoreAcceptHeader(true).
+//				// dont use Java Activation Framework since we are manually specifying the
+//				// mediatypes required below
+//				useJaf(false).defaultContentType(MediaType.APPLICATION_JSON).mediaType("xml", MediaType.APPLICATION_XML)
+//				.mediaType("json", MediaType.APPLICATION_JSON);
+//	}
 
 	@Override
-	public void configureContentNegotiation(ContentNegotiationConfigurer configurer) {
-		configurer.ignoreAcceptHeader(true).defaultContentType(new MediaType("text", "html", StandardCharsets.UTF_8))
-				.mediaType("inc", new MediaType("text", "inc", StandardCharsets.UTF_8))
-				.mediaType("htm", new MediaType("text", "htm", StandardCharsets.UTF_8))
-				.mediaType("html", new MediaType("text", "html", StandardCharsets.UTF_8))
-				.mediaType("json", new MediaType("application", "json", StandardCharsets.UTF_8))
-				.mediaType("jsonp", new MediaType("application", "javascript", StandardCharsets.UTF_8))
-				.mediaType("xml", new MediaType("application", "xml", StandardCharsets.UTF_8))
-				.mediaType("xls", new MediaType("application", "vnd.ms-excel", StandardCharsets.UTF_8));
+	public void addFormatters(FormatterRegistry registry) {
+		registry.addFormatterForFieldAnnotation(new CustomAnnotationFormatterFactory());
 	}
-//	
 
-//    @Bean
-//    public TilesViewResolver tilesViewResolver() {
-//        final TilesViewResolver tilesViewResolver = new TilesViewResolver();
-//        tilesViewResolver.setViewClass(TilesView.class);
-//        tilesViewResolver.setOrder(1);
-//        return tilesViewResolver;
-//    }
-//	
+	@Override
+	public void addInterceptors(InterceptorRegistry registry) {
+		registry.addInterceptor(new AccessInterceptor()).addPathPatterns("/**");
+	}
 
+	/**
+	 * 로그인 필터
+	 * 
+	 * @return
+	 */
 	@Bean
-	public ContentNegotiatingViewResolver contentNegotiatingViewResolver() {
-		ContentNegotiatingViewResolver contentNegotiatingViewResolver = new ContentNegotiatingViewResolver();
-		contentNegotiatingViewResolver.setOrder(1);
+	public FilterRegistrationBean<LoginCheckFilter> loginCheckFilterBean() {
 
-		UrlBasedViewResolver urlBasedViewResolver = new UrlBasedViewResolver();
-		urlBasedViewResolver.setViewClass(TilesView.class);
-		urlBasedViewResolver.setOrder(1);
+		FilterRegistrationBean<LoginCheckFilter> registrationBean = new FilterRegistrationBean<>();
+		registrationBean.setFilter(new LoginCheckFilter());
+		registrationBean.addUrlPatterns("*");
 
-		InternalResourceViewResolver internalResourceViewResolver = new InternalResourceViewResolver();
-		internalResourceViewResolver.setPrefix("/WEB-INF/view/");
-		internalResourceViewResolver.setSuffix(".jsp");
-		internalResourceViewResolver.setContentType("text/inc");
-		internalResourceViewResolver.setOrder(2);
-
-		List<ViewResolver> viewResolversList = new ArrayList<ViewResolver>();
-		viewResolversList.add(urlBasedViewResolver);
-		viewResolversList.add(internalResourceViewResolver);
-
-		contentNegotiatingViewResolver.setViewResolvers(viewResolversList);
-
-		List<View> viewList = new ArrayList<View>();
-
-		viewList.add(new CustomMappingJacksonJsonView());
-		viewList.add(new ExcelView());
-
-		contentNegotiatingViewResolver.setDefaultViews(viewList);
-
-		return contentNegotiatingViewResolver;
+		return registrationBean;
 	}
-
-	@Bean
-	public TilesConfigurer tilesConfigurer() {
-		TilesConfigurer tilesConfigurer = new TilesConfigurer();
-		tilesConfigurer.setDefinitions(new String[] { "classpath:tiles.xml" });
-		tilesConfigurer.setCheckRefresh(true);
-		tilesConfigurer.setPreparerFactoryClass(SimpleSpringPreparerFactory.class);
-		return tilesConfigurer;
+//
+	@Override
+	public void addViewControllers(ViewControllerRegistry registry) {
+		registry.addViewController("/").setViewName("forward:common/index.html");
 	}
-
-//
-//	@Override
-//	public void addFormatters(FormatterRegistry registry) {
-//		registry.addFormatterForFieldAnnotation(new CustomAnnotationFormatterFactory());
-//	}
-//	
-//	@Override
-//	public void addInterceptors(InterceptorRegistry registry) {
-//		registry.addInterceptor(new AccessInterceptor())
-//				.addPathPatterns("/*/*");
-//	}
-//
-//
-//	
-//	
-//	/**
-//	 * 로그인 필터
-//	 * 
-//	 * @return
-//	 */
-//	@Bean
-//	public FilterRegistrationBean<LoginCheckFilter> loginCheckFilterBean() {
-//
-//		FilterRegistrationBean<LoginCheckFilter> registrationBean = new FilterRegistrationBean<>();
-//		registrationBean.setFilter(new LoginCheckFilter());
-//		registrationBean.addUrlPatterns("*.json");
-//		registrationBean.addUrlPatterns("*.html");
-//
-//		return registrationBean;
-//	}
-//
-//	@Override
-//	public void addViewControllers(ViewControllerRegistry registry) {
-//		registry.addViewController("/").setViewName("forward:/index.jsp");
-//	}
 
 }

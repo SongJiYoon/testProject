@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="ko"	xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+
+<head th:fragment="headFragment">
+	<meta charset="UTF-8">
+	<title layout:title-pattern="$LAYOUT_TITLE"></title>
+	<!--IE Compatibility modes-->
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<!--Mobile first-->
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<!-- Bootstrap -->
+	<!-- <link rel="stylesheet" href="/css/bootstrap-timepicker.min.css" /> -->
+	<!-- Font Awesome -->
+	<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+	<!-- stylesheet -->
+	<link rel="stylesheet" th:href="@{/css/style.min.css}">
+	<!--Modernizr-->
+	<script src="//cdnjs.cloudflare.com/ajax/libs/modernizr/2.8.3/modernizr.min.js"></script>
+	<!--jQuery -->
+	<script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+	<script src="//cdnjs.cloudflare.com/ajax/libs/jquery.form/4.3.0/jquery.form.min.js"></script>
+	
+	<!--Bootstrap -->
+	<!-- spinner -->
+	<script th:src="@{/js/spin.min.js}"></script>
+	<!-- scripts -->
+	<script th:src="@{/js/common.js}"></script>
+</head>
+
+</html>

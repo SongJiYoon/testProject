@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+<head th:replace="common/fragments/head :: headFragment">
+<meta charset="UTF-8"/>
+<title layout:title-pattern="$LAYOUT_TITLE">default</title>
+</head>
+<body class="app header-fixed sidebar-fixed aside-menu-fixed sidebar-lg-show">
+<div id="wrap">
+
+	<div id="top" th:replace="common/fragments/top :: topFragment">
+	</div>
+	
+	<div id="left" th:replace="common/fragments/left :: leftFragment">
+	</div>
+	
+	<div class="main" id="content">
+		<ol class="breadcrumb d-lg-none mr-auto" style="margin-bottom:0;">
+			<li th:each="v : ${user.menuInfos}" th:if="${v.prtMenuNo == null}" class="breadcrumb-item">
+	        	<a th:href="@{'/index.html?menuNo=' + ${v.menuNo}}" th:text="${v.menuNm}"></a>
+	        </li>
+        </ol>
+          	<iframe id="mainArea" name="mainArea" src="" width="100%" style="margin-top:1.5rem; min-height: 844px; border:none;" ></iframe>
+	</div>
+	<!-- /#right -->
+</div>
+<!-- /#wrap -->
+<footer class="app-footer">
+	<div>
+		<span>2016 &copy; 구몬ICT 통합 관리자</span>
+	</div>
+</footer>
+
+<script>
+
+/* function memoPopup(){
+    var x = 770;
+    var y = 870;
+    var left = (screen.availWidth - x) / 2;
+    var top = (screen.availHeight - y) / 2;
+    var options = "menubar=no, toolbar=no, location=no, status=no, resizble=no, fullscreen=no, scrollbars=yes, top=" + top + ", left=" + left + ", width=" + x + ", height=" + y;
+    var url = "/admin/board/memo/memoSend.html";
+    var popup = window.open(url, "memo", options);
+}
+$(document).ready(function() {
+	// 쪽지 정보 조회
+	fn_memoConfirm(); 
+	
+});
+
+function fn_memoConfirm(){
+    var data = {};
+    data['userNo'] = '${user.userNo}';
+    f_ajax('getUnConfirmMemoCnt.json', data, function(data){
+             $("#unMemo").text(data.cnt); 
+    });
+} */
+
+
+
+</script>
+
+</body>
+</html>
