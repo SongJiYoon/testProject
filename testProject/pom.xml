@@ -17,11 +17,6 @@
 
 	<properties>
 		<java.version>1.8</java.version>
-		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-		<project.reporting.outputEncoding>UTF-8
-		</project.reporting.outputEncoding>
-		<org.springframework.version>5.1.5.RELEASE
-		</org.springframework.version>
 		<com.redjframework.version>3.4.305-RELEASE</com.redjframework.version>
 	</properties>
 
