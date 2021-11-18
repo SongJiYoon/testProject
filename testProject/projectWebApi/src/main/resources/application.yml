@@ -32,7 +32,12 @@ spring:
 #      suffix: .jsp
 #      contentType: text/inc
     
-
+#server
+server:
+  servlet:
+    contextPath: /openapi
+    session:
+      timeout: 14400
 ---
 #개발(dev)
 spring:
